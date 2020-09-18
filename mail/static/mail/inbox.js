@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', compose_email);
+  
+  // Send mail: Select the form om submit
+  //document.querySelector('form').onsubmit = send_mail;
 
   // By default, load the inbox
   load_mailbox('inbox');
@@ -30,4 +33,28 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+}
+
+function send_mail() {
+
+  const recep = document.querySelector('#compose-recipients').value;
+  const sub = document.querySelector('#compose-subject').value;
+  const bod = document.querySelector('#compose-body').value;
+  alert(`Send mail, to ${recep} for ${sub} message:${bod}` )
+
+  var mail = {recipients: recep, subject: sub, body: bod};
+  
+  fetch('/emails', {
+    method: 'POST',
+    body: JSON.stringify(mail)
+  })
+  .then(response => response.json())
+  .then(result => {
+      // Print result
+      console.log(result);
+  });
+  
+  return false;
+    
+
 }
