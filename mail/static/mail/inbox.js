@@ -17,7 +17,7 @@ function compose_email() {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
-
+  document.querySelector('#mailbox-view').style.display = 'none';
 
   
   document.querySelector('#compose-view').style.display = 'block';
@@ -34,25 +34,46 @@ function load_mailbox(mailbox) {
  
   document.querySelector('#compose-view').style.display = 'none';
   document.querySelector('#emails-view').style.display = 'block';
+  document.querySelector('#mailbox-view').style.display = 'block';
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
-  //console.log(mailbox);
+ 
+  //select the div output
+  const app = document.querySelector('#mailbox-view');
+  //set the style to the selected div
+  //app.style.border = "thick solid #0000FF";
   
   fetch(`/emails/${mailbox}`)
 
   .then(response => response.json())
   .then(emails => {
-    // Print emails
-    //console.log(emails);
-    //Do something with emails ...
-    
-      emails.forEach(element => {
-        
-        console.log(element)
-      });
-  });
-  
+    for (const mail of emails) {
+      let listItem = document.createElement('div');
+      listItem.appendChild(
+        document.createElement('strong')
+      ).textContent = mail.subject;
+      listItem.append(
+        ` send by ${
+          mail.sender
+        }`
+      );
+      listItem.appendChild(
+        document.createElement('strong')
+      ).textContent = ` at ${mail.timestamp}`;
+      //set the style for each element
+      listItem.style.border = "thick solid #0000FF";
+      listItem.style.padding = "25px";
+      listItem.style.margin = "5px";
+      console.log(listItem.read);
+      if (listItem.read == false) {
+        listItem.style.backgroundColor = "red";
+      } 
+      app.appendChild(listItem);
+    }
+  })
+  .catch(console.error);
+  return false
 }
 
 function send_mail() {
