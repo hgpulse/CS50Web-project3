@@ -65,9 +65,11 @@ function load_mailbox(mailbox) {
       listItem.style.border = "thick solid #0000FF";
       listItem.style.padding = "25px";
       listItem.style.margin = "5px";
-      console.log(listItem.read);
-      if (listItem.read == false) {
-        listItem.style.backgroundColor = "red";
+      console.log(`archive : ${listItem.archived}`);
+      console.log(`read : ${listItem.read}`);
+      // == undefined
+      if (listItem.read == null) {
+        listItem.style.backgroundColor = "grey";
       } 
       app.appendChild(listItem);
     }
