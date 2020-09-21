@@ -17,6 +17,8 @@ function compose_email() {
 
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
+
+
   
   document.querySelector('#compose-view').style.display = 'block';
 
@@ -29,12 +31,28 @@ function compose_email() {
 function load_mailbox(mailbox) {
   
   // Show the mailbox and hide other views
-  document.querySelector('#emails-view').style.display = 'block';
-  document.querySelector('#compose-view').style.display = 'none';
  
+  document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#emails-view').style.display = 'block';
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+  //console.log(mailbox);
+  
+  fetch(`/emails/${mailbox}`)
+
+  .then(response => response.json())
+  .then(emails => {
+    // Print emails
+    //console.log(emails);
+    //Do something with emails ...
+    
+      emails.forEach(element => {
+        
+        console.log(element)
+      });
+  });
+  
 }
 
 function send_mail() {
