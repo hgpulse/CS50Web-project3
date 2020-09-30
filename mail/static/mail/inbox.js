@@ -66,9 +66,16 @@ function load_mailbox(mailbox) {
   .then(response => response.json())
   .then(emails => {
     for (const mail of emails) {
+      
       let listItem = document.createElement('div');
       listItem.addEventListener('click', function() {
+        
+        // Clean innerHTML on click
+        const myNode = document.getElementById("mail-view");
+        myNode.innerHTML = '';
+        
       load_mail(mail.id)
+      
       console.log(`element ID: ${mail.id} has been clicked!`)
       });
       listItem.appendChild(
@@ -86,11 +93,12 @@ function load_mailbox(mailbox) {
       listItem.style.border = "thick solid #0000FF";
       listItem.style.padding = "25px";
       listItem.style.margin = "5px";
-      console.log(`archive : ${listItem.archived}`);
-      console.log(`read : ${listItem.read}`);
+      console.log(`mail ID : ${mail.id}`);
+      console.log(`archive : ${mail.archived}`);
+      console.log(`read : ${mail.read}`);
       // == undefined
-      if (listItem.read == null) {
-        listItem.style.backgroundColor = "white";
+      if (mail.read == true) {
+        listItem.style.backgroundColor = "grey";
       } 
       app.appendChild(listItem);
     }
@@ -118,47 +126,45 @@ function load_mail(id) {
   .then(email => {
     // Print email
     console.log(email);
-
-    
-      const mailDiv = document.createElement('div');
-      mailDiv.setAttribute("id", "mail");
-      let title = document.createElement('h4');
-
-      title.appendChild(
+    let mail = document.createElement('div');
+    // set id to div 
+    //mail.setAttribute("id", `${id}`);
+    mail.appendChild(
         document.createElement('italic')
       ).textContent = 
-      title.append(
+      mail.append(
         ` ${
           email.sender
         } sent to 
         ${email.recipients}
-        ${email.subject} at ${email.timestamp}`
+        ${email.subject} the ${email.timestamp}
+        Body: ${email.body}`
       );
 
       //set the style for each element
-      title.style.border = "thick solid #0000FF";
-      title.style.padding = "25px";
-      title.style.margin = "5px";
-      console.log(`archive : ${title.archived}`);
-      console.log(`read : ${title.read}`);
+      
+      console.log(`archive : ${mail.archived}`);
+      console.log(`read : ${mail.read}`);
 
-      let body = document.createElement('p');
-      body.appendChild(
-        document.createElement('italic')
-      ).textContent = ` Body: ${email.body}`;
-      body.style.border = "thick solid #0000FF";
-      body.style.padding = "25px";
-      body.style.margin = "5px";
+      
+      
       // == undefined
       
-      app.appendChild(title);
-      app.appendChild(body);
-    
-
+      app.appendChild(mail);
+      
     // ... do something else with email ...
   });
-
+  
+  //mark email as read
+  fetch(`/emails/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({read: true})
+  })
+  return true
+  
 }
+
+
 
 function send_mail() {
   

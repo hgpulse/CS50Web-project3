@@ -2,12 +2,15 @@ textarea {
     min-height: 400px;
 }
 
-#emails-view, #compose-view, #mail-view {
-    display: none;
-}
 
-#mail {
-    height: 200px;
+
+#mail-view {
+    height: 100%;
     width: 50%;
-    background-color: powderblue;
+    border: thick solid #0000FF;
+    padding-top: 50px;
+    padding-right: 30px;
+    padding-bottom: 50px;
+    padding-left: 80px;
+    margin: 5px;
 }
