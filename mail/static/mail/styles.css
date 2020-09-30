@@ -8,9 +8,16 @@ textarea {
     height: 100%;
     width: 50%;
     border: thick solid #0000FF;
-    padding-top: 50px;
+    padding-top: 80px;
     padding-right: 30px;
     padding-bottom: 50px;
     padding-left: 80px;
     margin: 5px;
+    display:flex;
+}
+
+#archiveBtn {
+    display:flex;
+    align-self: flex-end;
+    order: 1;
 }

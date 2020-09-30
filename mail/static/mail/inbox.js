@@ -58,16 +58,62 @@ function load_mailbox(mailbox) {
  
   //select the div output
   const app = document.querySelector(`#emails-view`);
-  //set the style to the selected div
-  //app.style.border = "thick solid #0000FF";
+  
+  
+
   
   fetch(`/emails/${mailbox}`)
 
   .then(response => response.json())
   .then(emails => {
     for (const mail of emails) {
-      
+      //create the Div for mail preview
       let listItem = document.createElement('div');
+      listItem.id = 'mail';
+      // create archived Button
+      var archiveBtn = document.createElement('button');
+      archiveBtn.id = 'archiveBtn';
+      
+      //add button to each mail view
+      
+      if (mailbox == "inbox"){
+        // Clean innerHTML on click
+        
+
+        archiveBtn.innerHTML = "Archive";
+        archiveBtn.className = "btn btn-success";
+        app.appendChild(archiveBtn);
+        //listItem.append(archiveBtn);
+        //add onclick event on archive button
+        archiveBtn.addEventListener('click', function() {
+        let archive = true;
+        archive_mail(mail.id, archive)
+        console.log('This button has been clicked!')
+        });
+        console.log("this was inbox");
+        
+      } else if (mailbox == "archive") {
+
+        archiveBtn.innerHTML = "Restore";
+        archiveBtn.className = "btn btn-warning";
+        app.appendChild(archiveBtn)
+        //listItem.append(archiveBtn);
+        //add onclick event on archive button
+        archiveBtn.addEventListener('click', function() {
+        let restore = false;
+        archive_mail(mail.id, restore)
+        console.log('This button has been clicked!')
+      });
+        console.log("this was archived");
+       
+      } else {
+        console.log("no button")
+      }
+      
+      
+
+      
+      //add Onclick event on DIV
       listItem.addEventListener('click', function() {
         
         // Clean innerHTML on click
@@ -99,9 +145,12 @@ function load_mailbox(mailbox) {
       // == undefined
       if (mail.read == true) {
         listItem.style.backgroundColor = "grey";
-      } 
+      }
+      
       app.appendChild(listItem);
+      
     }
+
     
   })
   
@@ -127,6 +176,8 @@ function load_mail(id) {
     // Print email
     console.log(email);
     let mail = document.createElement('div');
+    
+    
     // set id to div 
     //mail.setAttribute("id", `${id}`);
     mail.appendChild(
@@ -190,6 +241,18 @@ function send_mail() {
   load_mailbox('sent')
   return false;
   
+}
+
+function archive_mail(id, status) {
+
+  fetch(`/emails/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+        archived: status
+    })
+  })
+  load_mailbox('inbox')
+  return true;
 }
 
 
