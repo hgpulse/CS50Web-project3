@@ -176,7 +176,7 @@ function load_mail(id) {
     // Print email
     console.log(email);
     //how to convert JSON response to javascript objct ?
-    var mailR = email;
+    
     var mail = document.createElement('div');
     mail.id = 'mail-view-style';
     // create archived Button
@@ -195,7 +195,7 @@ function load_mail(id) {
       myNode.innerHTML = '';
       
       
-      reply_email(mailR);
+      reply_email(id);
       console.log('Fire Reply view')
     });
 
@@ -206,11 +206,10 @@ function load_mail(id) {
         document.createElement('italic')
       ).textContent = 
       mail.append(
-        ` ${
-          email.sender
-        } sent to 
-        ${email.recipients}
-        ${email.subject} the ${email.timestamp}
+        ` FROM: ${email.sender}
+          TO: ${email.recipients}
+        Subject: ${email.subject} 
+        Timestamp: ${email.timestamp}
         Body: ${email.body}`
       );
 
@@ -277,7 +276,7 @@ function archive_mail(id, status) {
   return true;
 }
 
-function reply_email(mail) {
+function reply_email(id) {
   
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
@@ -293,10 +292,46 @@ function reply_email(mail) {
   title = app.querySelector('h3');
   title.innerHTML = 'Reply Email';
 
-  console.log(`Reply from this ID: ${mail}`)
+  console.log(`Reply from this ID: ${id}`)
+
+
+
+  //get Email data
+  fetch(`/emails/${id}`)
+  .then(response => response.json())
+  .then(email => {
+    //Pre-fill recepient
+    var sender = document.querySelector('#compose-recipients');
+    sender.value = email.sender;
+    //Pre-fill subject
+    var subject = document.querySelector('#compose-subject')
+    console.log(`Subject Value:  ${email.subject}`)
+    var subjectCheck = email.subject;
+    var resultRe = subjectCheck.includes("RE: ")
+    console.log(resultRe)
+    //check if subject contain RE: 
+    if (resultRe) {
+      subject.value = `${email.subject}`;
+    }
+    else {
+      subject.value = `RE: ${email.subject}`;
+    }
+    console.log(`Subject Value:  ${email.subject}`)
+    //Pre-fill Body
+    var body = document.querySelector('#compose-body')
+    body.value = ` 
+    
+    On ${email.timestamp} ${email.sender} wrote:
+    ${email.body}`;
+  
+  // Print email
+  console.log(email);
+  
+  // ... do something else with email ...
+  });
 
   // Clear out composition fields
-  document.querySelector('#compose-recipients').value = '';
-  document.querySelector('#compose-subject').value = '';
-  document.querySelector('#compose-body').value = '';
+//   document.querySelector('#compose-recipients').value = '';
+//   document.querySelector('#compose-subject').value = '';
+//   document.querySelector('#compose-body').value = '';
 }
