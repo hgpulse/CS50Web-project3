@@ -126,12 +126,8 @@ function load_mailbox(mailbox) {
       });
       listItem.appendChild(
         document.createElement('strong')
-      ).textContent = mail.subject;
-      listItem.append(
-        ` send by ${
-          mail.sender
-        }`
-      );
+      ).textContent = `Subject: ${mail.subject} -- FROM: ${mail.sender}`;
+      
       listItem.appendChild(
         document.createElement('strong')
       ).textContent = ` at ${mail.timestamp}`;
@@ -258,7 +254,7 @@ function send_mail() {
       // Print result
       console.log(result);
   });
-  // Show compose view and hide other views
+  // SLoad sent mailbox
   load_mailbox('sent')
   return false;
   
@@ -307,14 +303,14 @@ function reply_email(id) {
     var subject = document.querySelector('#compose-subject')
     console.log(`Subject Value:  ${email.subject}`)
     var subjectCheck = email.subject;
-    var resultRe = subjectCheck.includes("RE: ")
+    var resultRe = subjectCheck.includes("Re: ")
     console.log(resultRe)
     //check if subject contain RE: 
     if (resultRe) {
       subject.value = `${email.subject}`;
     }
     else {
-      subject.value = `RE: ${email.subject}`;
+      subject.value = `Re: ${email.subject}`;
     }
     console.log(`Subject Value:  ${email.subject}`)
     //Pre-fill Body
