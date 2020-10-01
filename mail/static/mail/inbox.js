@@ -175,9 +175,31 @@ function load_mail(id) {
   .then(email => {
     // Print email
     console.log(email);
-    let mail = document.createElement('div');
+    //how to convert JSON response to javascript objct ?
+    var mailR = email;
+    var mail = document.createElement('div');
+    mail.id = 'mail-view-style';
+    // create archived Button
+    var replyBtn = document.createElement('button');
+    replyBtn.id = 'replyBtn';
+    replyBtn.className = "btn btn-success";
+    replyBtn.innerHTML = "Reply";
+    // add BTn to main div mail-view
+    mail.appendChild(replyBtn)
     
-    
+    //Add click event for
+    //add onclick event on archive button
+    replyBtn.addEventListener('click', function() {
+      // Clean innerHTML on click for mail-view
+      const myNode = document.getElementById("mail-view");
+      myNode.innerHTML = '';
+      
+      
+      reply_email(mailR);
+      console.log('Fire Reply view')
+    });
+
+
     // set id to div 
     //mail.setAttribute("id", `${id}`);
     mail.appendChild(
@@ -255,4 +277,26 @@ function archive_mail(id, status) {
   return true;
 }
 
+function reply_email(mail) {
+  
+  // Show compose view and hide other views
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#mail-view').style.display = 'none';
+  
+  
+  document.querySelector('#compose-view').style.display = 'block';
+  
+  //select the div output
+  const app = document.querySelector(`#compose-view`);
+  
+  //Change the Title of the page
+  title = app.querySelector('h3');
+  title.innerHTML = 'Reply Email';
 
+  console.log(`Reply from this ID: ${mail}`)
+
+  // Clear out composition fields
+  document.querySelector('#compose-recipients').value = '';
+  document.querySelector('#compose-subject').value = '';
+  document.querySelector('#compose-body').value = '';
+}

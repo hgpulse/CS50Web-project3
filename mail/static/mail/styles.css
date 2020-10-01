@@ -5,19 +5,33 @@ textarea {
 
 
 #mail-view {
+    position: static;
+    width: 1000px;
+    height: 200px;
+
+}
+
+#mail-view-style {
+    position: relative;
+    border: 1px solid blue;
+    width: 80%;
     height: 100%;
-    width: 50%;
-    border: thick solid #0000FF;
-    padding-top: 80px;
-    padding-right: 30px;
-    padding-bottom: 50px;
-    padding-left: 80px;
-    margin: 5px;
-    display:flex;
+    padding: 10px;
+
 }
 
 #archiveBtn {
     display:flex;
     align-self: flex-end;
     order: 1;
+}
+
+#replyBtn {
+    position: absolute;
+    bottom: 0;
+    right: 15px;
+    margin: 15px;
+
+
+
 }
